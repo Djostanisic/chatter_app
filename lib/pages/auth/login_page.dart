@@ -1,4 +1,6 @@
 import 'package:chatter_app/pages/auth/register_page.dart';
+import 'package:chatter_app/shared/constants.dart';
+import 'package:chatter_app/shared/strings.dart';
 import 'package:chatter_app/widgets/widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -27,19 +29,19 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                const Text("Chatter",
+                Text(Strings.appName,
                     style:
-                        TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                        const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
-                const Text(
-                  "Connect with friends, share ideas, and stay updated with Chatter!",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                Text(
+                  Strings.signInPageSubtitle,
+                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                   textAlign: TextAlign.center,
                 ),
                 Image.asset("assets/login.png"),
                 TextFormField(
                   decoration: textInputDecoration.copyWith(
-                      labelText: "Email",
+                      labelText: Strings.emailLabel,
                       prefixIcon: Icon(
                         Icons.email,
                         color: Theme.of(context).primaryColor,
@@ -51,24 +53,24 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   validator: (value) {
                     return RegExp(
-                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                Constants.emailValidationFormula)
                             .hasMatch(value!)
                         ? null
-                        : "Please enter a valid email adress";
+                        : Strings.emailValidateMessage;
                   },
                 ),
                 const SizedBox(height: 15),
                 TextFormField(
                     obscureText: true,
                     decoration: textInputDecoration.copyWith(
-                        labelText: "Password",
+                        labelText: Strings.passwordLabel,
                         prefixIcon: Icon(
                           Icons.lock,
                           color: Theme.of(context).primaryColor,
                         )),
                     validator: (value) {
                       if (value!.length < 8) {
-                        return "Password must be at least 8 characters long";
+                        return Strings.passwordValidateMessage;
                       } else {
                         return null;
                       }
@@ -87,9 +89,9 @@ class _LoginPageState extends State<LoginPage> {
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30))),
-                    child: const Text(
-                      "Sign in",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    child: Text(
+                      Strings.signInButtonLabel,
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                     onPressed: () {
                       login();
@@ -100,11 +102,11 @@ class _LoginPageState extends State<LoginPage> {
                   height: 10,
                 ),
                 Text.rich(TextSpan( 
-                    text: "Don't have and acout? ",
+                    text: Strings.notRegisteredText,
                     style: const TextStyle(color: Colors.black, fontSize: 14),
                     children: <TextSpan>[
                       TextSpan(
-                        text: "Register here",
+                        text: Strings.registerHereText,
                         style: const TextStyle(color: Colors.black,
                         decoration: TextDecoration.underline),
                         recognizer: TapGestureRecognizer()..onTap = () {
