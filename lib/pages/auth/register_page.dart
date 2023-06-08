@@ -141,7 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         style: const TextStyle(color: Colors.black,
                         decoration: TextDecoration.underline),
                         recognizer: TapGestureRecognizer()..onTap = () {
-                          nextScreenReplace(context, const LoginPage());
+                          popBackStack(context);
                         }
                       ),
                     ]))
