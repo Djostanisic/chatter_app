@@ -6,10 +6,9 @@ import '../service/auth_service.dart';
 import 'auth/login_page.dart';
 
 class ProfilePage extends StatefulWidget {
-  String userName;
-  String email;
-  ProfilePage({Key? key, required this.email, required this.userName})
-      : super(key: key);
+  final String userName;
+  final String email;
+  const ProfilePage({super.key, required this.email, required this.userName});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -55,7 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             ListTile(
                 onTap: () {
-                  Navigator.pop(context);
+                  popBackStack(context);
                   nextScreenReplace(context, const HomePage());
                 },
                 contentPadding:
@@ -67,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 )),
             ListTile(
                 onTap: () {
-                  Navigator.pop(context);
+                  popBackStack(context);
                 },
                 selectedColor: Theme.of(context).primaryColor,
                 selected: true,
@@ -91,7 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           actions: [
                             IconButton(
                                 onPressed: () {
-                                  Navigator.pop(context);
+                                  popBackStack(context);
                                 },
                                 icon: const Icon(
                                   Icons.cancel,

@@ -4,6 +4,7 @@ import 'package:chatter_app/pages/profile_page.dart';
 import 'package:chatter_app/pages/search_page.dart';
 import 'package:chatter_app/service/auth_service.dart';
 import 'package:chatter_app/service/database_service.dart';
+import 'package:chatter_app/widgets/group_tile.dart';
 import 'package:chatter_app/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,14 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     gettingUserData();
+  }
+
+  String getId(String res) {
+    return res.substring(0, res.indexOf("_"));
+  }
+
+  String getName(String res) {
+    return res.substring(res.indexOf("_") + 1);
   }
 
   gettingUserData() async {
@@ -104,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                 )),
             ListTile(
                 onTap: () {
-                  Navigator.pop(context);
+                  popBackStack(context);
                   nextScreenReplace(
                       context,
                       ProfilePage(
@@ -132,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                           actions: [
                             IconButton(
                                 onPressed: () {
-                                  Navigator.pop(context);
+                                  popBackStack(context);
                                 },
                                 icon: const Icon(
                                   Icons.cancel,
@@ -184,68 +193,78 @@ class _HomePageState extends State<HomePage> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: const Text(
-              "Create a group",
-              textAlign: TextAlign.left,
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                isLoading == true
-                    ? Center(
-                        child: CircularProgressIndicator(
-                            color: Theme.of(context).primaryColor))
-                    : TextField(
-                        onChanged: (value) {
-                          setState(() {
-                            groupName = value;
-                          });
-                        },
-                        style: const TextStyle(color: Colors.black),
-                        decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Theme.of(context).primaryColor),
-                                borderRadius: BorderRadius.circular(30)),
-                            errorBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.red),
-                                borderRadius: BorderRadius.circular(30)),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Theme.of(context).primaryColor),
-                                borderRadius: BorderRadius.circular(30)))),
-              ],
-            ),
-            actions: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor),
-                child: const Text("CANCEL"),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (groupName != "") {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
-                        .crateGroup(userName,
-                            FirebaseAuth.instance.currentUser!.uid, groupName).whenComplete(() {
-                              isLoading = false;
-                            });
-                            Navigator.pop(context);
-                            showSnackBar(context, Colors.green, "Group created successfully.");
-                  } else {}
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor),
-                child: const Text("CREATE"),
-              ),
-            ],
+          return StatefulBuilder(
+            builder: ((context, setState) {
+              return AlertDialog(
+                title: const Text(
+                  "Create a group",
+                  textAlign: TextAlign.left,
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    isLoading == true
+                        ? Center(
+                            child: CircularProgressIndicator(
+                                color: Theme.of(context).primaryColor))
+                        : TextField(
+                            onChanged: (value) {
+                              setState(() {
+                                groupName = value;
+                              });
+                            },
+                            style: const TextStyle(color: Colors.black),
+                            decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).primaryColor),
+                                    borderRadius: BorderRadius.circular(30)),
+                                errorBorder: OutlineInputBorder(
+                                    borderSide:
+                                        const BorderSide(color: Colors.red),
+                                    borderRadius: BorderRadius.circular(30)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).primaryColor),
+                                    borderRadius: BorderRadius.circular(30)))),
+                  ],
+                ),
+                actions: [
+                  ElevatedButton(
+                    onPressed: () {
+                      popBackStack(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor),
+                    child: const Text("CANCEL"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (groupName != "") {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        DatabaseService(
+                                uid: FirebaseAuth.instance.currentUser!.uid)
+                            .createGroup(
+                                userName,
+                                FirebaseAuth.instance.currentUser!.uid,
+                                groupName)
+                            .whenComplete(() {
+                          isLoading = false;
+                        });
+                        popBackStack(context);
+                        showSnackBar(context, Colors.green,
+                            "Group created successfully.");
+                      } else {}
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor),
+                    child: const Text("CREATE"),
+                  ),
+                ],
+              );
+            }),
           );
         });
   }
@@ -256,8 +275,16 @@ class _HomePageState extends State<HomePage> {
       builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data['groups'].length != null &&
-              snapshot.data['groups'].length != 0) {
-            return Text("Hellooo");
+              snapshot.data['groups'].length > 0) {
+                return ListView.builder(
+                  itemCount: snapshot.data["groups"].length,
+                  itemBuilder: (context, index) {
+                    int reverseIndex = (snapshot.data['groups'].length - 1) - index;
+                    return GroupTile(
+                      groupName: getName(snapshot.data["groups"][reverseIndex]),
+                      groupId: getId(snapshot.data["groups"][reverseIndex]), 
+                      userName: snapshot.data["fullName"]);
+                  },);
           } else {
             return noGroupWidget();
           }

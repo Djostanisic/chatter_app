@@ -30,7 +30,7 @@ class DatabaseService {
     return userCollection.doc(uid).snapshots();
   }
 
-  Future crateGroup(String userName, String id, String groupName) async {
+  Future createGroup(String userName, String id, String groupName) async {
     DocumentReference groupDocumentReference = await groupsCollection.add({
       "groupName": groupName,
       "groupIcon": "",

@@ -24,9 +24,8 @@ void nextScreenReplace(context, page) {
   );
 }
 
-
 void popBackStack(BuildContext context) {
-  Navigator.pop(context);
+  popBackStack(context);
 }
 
 void showSnackBar(context, color, message) {
@@ -36,7 +35,7 @@ void showSnackBar(context, color, message) {
       style: const TextStyle(fontSize: 14),
     ),
     backgroundColor: color,
-    duration: const Duration(seconds: 5),
+    duration: const Duration(seconds: 3),
     action: SnackBarAction(
       label: "OK",
       onPressed: () {},
