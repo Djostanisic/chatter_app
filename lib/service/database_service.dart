@@ -67,10 +67,11 @@ class DatabaseService {
     return documentSnapshot['admin'];
   }
 
-    getGroupMembers(groupId) async {
+  getGroupMembers(groupId) async {
     return groupCollection.doc(groupId).snapshots();
   }
-searchByName(String groupName) {
+
+  searchByName(String groupName) {
     return groupCollection.where("groupName", isEqualTo: groupName).get();
   }
 
