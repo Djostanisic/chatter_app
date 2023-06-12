@@ -1,7 +1,7 @@
 import 'package:chatter_app/pages/home_page.dart';
+import 'package:chatter_app/shared/strings.dart';
 import 'package:chatter_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-
 import '../service/auth_service.dart';
 import 'auth/login_page.dart';
 
@@ -23,9 +23,9 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
-        title: const Text(
-          "Profile",
-          style: TextStyle(
+        title: Text(
+          Strings.profileTitle,
+          style: const TextStyle(
               color: Colors.white, fontSize: 27, fontWeight: FontWeight.bold),
         ),
       ),
@@ -60,9 +60,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 leading: const Icon(Icons.group),
-                title: const Text(
-                  "Groups",
-                  style: TextStyle(color: Colors.black),
+                title: Text(
+                  Strings.groupsTitle,
+                  style: const TextStyle(color: Colors.black),
                 )),
             ListTile(
                 onTap: () {
@@ -73,9 +73,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 leading: const Icon(Icons.person),
-                title: const Text(
-                  "Profile",
-                  style: TextStyle(color: Colors.black),
+                title: Text(
+                  Strings.profileTitle,
+                  style: const TextStyle(color: Colors.black),
                 )),
             ListTile(
                 onTap: () async {
@@ -84,9 +84,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: const Text("Logout"),
+                          title: Text(Strings.logoutTitle),
                           content:
-                              const Text("Are you sure you want to logout?"),
+                             Text(Strings.logoutMessage),
                           actions: [
                             IconButton(
                                 onPressed: () {
@@ -114,9 +114,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 leading: const Icon(Icons.exit_to_app),
-                title: const Text(
-                  "Logout",
-                  style: TextStyle(color: Colors.black),
+                title: Text(
+                  Strings.logoutTitle,
+                  style: const TextStyle(color: Colors.black),
                 )),
           ],
         ),
@@ -135,7 +135,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children:  [
-                const Text("Full Name", style: TextStyle(fontSize: 17)),
+                Text(Strings.fullNameLabel, style: const TextStyle(fontSize: 17)),
                 Text(widget.userName, style: const TextStyle(fontSize: 17)),
               ]
             ),
@@ -143,7 +143,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children:  [
-                const Text("Email", style: TextStyle(fontSize: 17)),
+                Text(Strings.emailLabel, style: const TextStyle(fontSize: 17)),
                 Text(widget.email, style: const TextStyle(fontSize: 17)),
               ]
             ),

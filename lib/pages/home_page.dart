@@ -4,6 +4,7 @@ import 'package:chatter_app/pages/profile_page.dart';
 import 'package:chatter_app/pages/search_page.dart';
 import 'package:chatter_app/service/auth_service.dart';
 import 'package:chatter_app/service/database_service.dart';
+import 'package:chatter_app/shared/strings.dart';
 import 'package:chatter_app/widgets/group_tile.dart';
 import 'package:chatter_app/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -72,9 +73,9 @@ class _HomePageState extends State<HomePage> {
           elevation: 0,
           centerTitle: true,
           backgroundColor: Theme.of(context).primaryColor,
-          title: const Text(
-            "Groups",
-            style: TextStyle(
+          title: Text(
+            Strings.groupsTitle,
+            style: const TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 27),
           )),
       drawer: Drawer(
@@ -107,9 +108,9 @@ class _HomePageState extends State<HomePage> {
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 leading: const Icon(Icons.group),
-                title: const Text(
-                  "Groups",
-                  style: TextStyle(color: Colors.black),
+                title: Text(
+                  Strings.groupsTitle,
+                  style: const TextStyle(color: Colors.black),
                 )),
             ListTile(
                 onTap: () {
@@ -124,9 +125,9 @@ class _HomePageState extends State<HomePage> {
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 leading: const Icon(Icons.person),
-                title: const Text(
-                  "Profile",
-                  style: TextStyle(color: Colors.black),
+                title: Text(
+                  Strings.profileTitle,
+                  style: const TextStyle(color: Colors.black),
                 )),
             ListTile(
                 onTap: () async {
@@ -135,9 +136,8 @@ class _HomePageState extends State<HomePage> {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: const Text("Logout"),
-                          content:
-                              const Text("Are you sure you want to logout?"),
+                          title: Text(Strings.logoutTitle),
+                          content: Text(Strings.logoutMessage),
                           actions: [
                             IconButton(
                                 onPressed: () {
@@ -165,9 +165,9 @@ class _HomePageState extends State<HomePage> {
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 leading: const Icon(Icons.exit_to_app),
-                title: const Text(
-                  "Logout",
-                  style: TextStyle(color: Colors.black),
+                title: Text(
+                  Strings.logoutTitle,
+                  style: const TextStyle(color: Colors.black),
                 )),
           ],
         ),
@@ -196,8 +196,8 @@ class _HomePageState extends State<HomePage> {
           return StatefulBuilder(
             builder: ((context, setState) {
               return AlertDialog(
-                title: const Text(
-                  "Create a group",
+                title: Text(
+                  Strings.createGroupTitle,
                   textAlign: TextAlign.left,
                 ),
                 content: Column(
@@ -236,7 +236,9 @@ class _HomePageState extends State<HomePage> {
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor),
-                    child: const Text("CANCEL"),
+                    child: Text(
+                      Strings.cancel.toUpperCase(),
+                    ),
                   ),
                   ElevatedButton(
                     onPressed: () async {
@@ -252,15 +254,16 @@ class _HomePageState extends State<HomePage> {
                                 groupName)
                             .whenComplete(() {
                           isLoading = false;
+                           popBackStack(context);
+                           showSnackBar(context, Colors.green,
+                            Strings.groupCreatedMessage);
                         });
-                        popBackStack(context);
-                        showSnackBar(context, Colors.green,
-                            "Group created successfully.");
+                       
                       } else {}
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor),
-                    child: const Text("CREATE"),
+                    child: Text(Strings.create.toUpperCase()),
                   ),
                 ],
               );
@@ -276,15 +279,16 @@ class _HomePageState extends State<HomePage> {
         if (snapshot.hasData) {
           if (snapshot.data['groups'].length != null &&
               snapshot.data['groups'].length > 0) {
-                return ListView.builder(
-                  itemCount: snapshot.data["groups"].length,
-                  itemBuilder: (context, index) {
-                    int reverseIndex = (snapshot.data['groups'].length - 1) - index;
-                    return GroupTile(
-                      groupName: getName(snapshot.data["groups"][reverseIndex]),
-                      groupId: getId(snapshot.data["groups"][reverseIndex]), 
-                      userName: snapshot.data["fullName"]);
-                  },);
+            return ListView.builder(
+              itemCount: snapshot.data["groups"].length,
+              itemBuilder: (context, index) {
+                int reverseIndex = snapshot.data['groups'].length - index - 1;
+                return GroupTile(
+                    groupName: getName(snapshot.data["groups"][reverseIndex]),
+                    groupId: getId(snapshot.data["groups"][reverseIndex]),
+                    userName: snapshot.data["fullName"]);
+              },
+            );
           } else {
             return noGroupWidget();
           }
@@ -319,8 +323,8 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 20,
           ),
-          const Text(
-            "You have not joined any groups, tap on the add icon to create a group or use the top search button to find and join a group.",
+          Text(
+            Strings.noGroupText,
             textAlign: TextAlign.center,
           )
         ],
