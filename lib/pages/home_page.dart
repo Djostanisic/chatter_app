@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
         email = value!;
       });
     });
-    await HelperFunctions.getUsernameFromSP().then((value) {
+    await HelperFunctions.getUserNameFromSP().then((value) {
       setState(() {
         userName = value!;
       });
