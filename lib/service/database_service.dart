@@ -75,7 +75,6 @@ class DatabaseService {
     return groupCollection.where("groupName", isEqualTo: groupName).get();
   }
 
-  // function -> bool
   Future<bool> isUserJoined(
       String groupName, String groupId, String userName) async {
     DocumentReference userDocumentReference = userCollection.doc(uid);
@@ -89,17 +88,15 @@ class DatabaseService {
     }
   }
 
-  // toggling the group join/exit
   Future toggleGroupJoin(
       String groupId, String userName, String groupName) async {
-    // doc reference
+    
     DocumentReference userDocumentReference = userCollection.doc(uid);
     DocumentReference groupDocumentReference = groupCollection.doc(groupId);
 
     DocumentSnapshot documentSnapshot = await userDocumentReference.get();
     List<dynamic> groups = await documentSnapshot['groups'];
 
-    // if user has our groups -> then remove then or also in other part re join
     if (groups.contains("${groupId}_$groupName")) {
       await userDocumentReference.update({
         "groups": FieldValue.arrayRemove(["${groupId}_$groupName"])
@@ -117,7 +114,6 @@ class DatabaseService {
     }
   }
 
-  // send message
   sendMessage(String groupId, Map<String, dynamic> chatMessageData) async {
     groupCollection.doc(groupId).collection("messages").add(chatMessageData);
     groupCollection.doc(groupId).update({
