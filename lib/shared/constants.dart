@@ -8,5 +8,5 @@ class Constants {
 
   static String emailValidationFormula = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
 
-  final primaryColor = const Color(0xFFF5B402);
+  final primaryColor = const Color.fromARGB(255, 229, 141, 0);
 }

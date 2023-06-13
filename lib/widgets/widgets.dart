@@ -1,3 +1,4 @@
+import 'package:chatter_app/shared/strings.dart';
 import 'package:flutter/material.dart';
 
 const textInputDecoration = InputDecoration(
@@ -24,9 +25,8 @@ void nextScreenReplace(context, page) {
   );
 }
 
-
 void popBackStack(BuildContext context) {
-  Navigator.pop(context);
+   Navigator.of(context).pop();
 }
 
 void showSnackBar(context, color, message) {
@@ -36,9 +36,9 @@ void showSnackBar(context, color, message) {
       style: const TextStyle(fontSize: 14),
     ),
     backgroundColor: color,
-    duration: const Duration(seconds: 5),
+    duration: const Duration(seconds: 3),
     action: SnackBarAction(
-      label: "OK",
+      label: Strings.labelOk,
       onPressed: () {},
       textColor: Colors.white,
     ),
